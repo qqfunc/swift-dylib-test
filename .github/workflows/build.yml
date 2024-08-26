@@ -16,8 +16,10 @@ jobs:
     runs-on: macos-latest
 
     steps:
+    - name: Checkout ${{ github.repository }}
+      uses: actions/checkout@v4
     - name: Build library
-      run: xcrun --sdk iphoneos swiftc -target arm64-apple-ios17.0 -module-name main -emit-library src/main.swift
+      run: xcrun --sdk iphoneos swiftc -target arm64-apple-ios17.0 -module-name main -emit-library src/*
     - name: Upload library
       uses: actions/upload-artifact@v4
       with:
