@@ -5,9 +5,10 @@ class MainViewController: UIViewController {
 }
 
 func present(_ viewController: UIViewController) {
-    let app = UIApplication.shared
-    let window = app.connectedScenes.compactMap({ $0 as? UIWindowScene }).first?.keyWindow
-    let rootViewController = window.rootViewController
+    let application = UIApplication.shared
+    let windowScenes = application.connectedScenes.compactMap { $0 as? UIWindowScene }
+    guard let window = windowScenes.first?.keyWindow,
+          let rootViewController = window.rootViewController else { return }
     Task.detached { @MainActor in
         rootViewController.present(viewController, animated: true, completion: nil)
     }
