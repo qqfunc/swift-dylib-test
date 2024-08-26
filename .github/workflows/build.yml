@@ -1,0 +1,27 @@
+name: Build
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: macos-latest
+
+    steps:
+    - name: Build library
+      run: xcrun --sdk iphoneos swiftc -target arm64-apple-ios17.0 -module-name main -emit-library src/*
+    - name: Upload library
+      uses: actions/upload-artifact@v4
+      with:
+        name: libmain
+        path: ${{ github.workspace }}/libmain.dylib
+        if-no-files-found: error
+        retention-days: 1
